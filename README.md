@@ -25,11 +25,11 @@ app/reprositories/coreReprository.php
 Применение встроенного в Laravel паттерна проектирования наблюдатель. Листинги находятся в папке app/Observers
 Наблюдатели, реагируя на различные действия с постами и категориями запускают вспомогательная медоты. их список:
 
-- **$this->setSlug($blogPostModels);**
-- **$this->setPublishTime($blogPostModels);**
-- **$this->unSetPublishTime($blogPostModels);**
-- **$this->setUser($blogPostModels);**
-- **$this->setHtml($blogPostModels);**
+- **[$this->setSlug($blogPostModels);]**
+- **[$this->setPublishTime($blogPostModels);]**
+- **[$this->unSetPublishTime($blogPostModels)];**
+- **[$this->setUser($blogPostModels);]**
+- **[$this->setHtml($blogPostModels);]**
 
 
 
