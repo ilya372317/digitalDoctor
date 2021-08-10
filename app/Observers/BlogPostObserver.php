@@ -47,7 +47,7 @@ class BlogPostObserver
         $this->unSetPublishTime($blogPostModels);
         $this->setUser($blogPostModels);
         $this->setHtml($blogPostModels);
-     
+
 
     }
 
@@ -85,18 +85,24 @@ class BlogPostObserver
     }
 
     private function setSlug(BlogPostModels $blogPostModels){
+
+        //если slug отсутствует, тогда формируем его из title
         if (empty($blogPostModels->slug)) {
             $blogPostModels->slug = Str::slug($blogPostModels->title);
         }
     }
 
     private function setPublishTime(BlogPostModels $blogPostModels){
+
+        //если пост опубликован, присвоить ему время публикации
         if (!empty($blogPostModels->is_published)) {
             $blogPostModels->published_at = Carbon::now();
         }
     }
 
     private function unSetPublishTime(BlogPostModels $blogPostModels){
+
+        //если пост не опубликован и при этом существует дата публикации, очистить ее
         if (empty($blogPostModels->is_published && $blogPostModels->published_at)) {
             $blogPostModels->published_at = null;
         }
@@ -104,11 +110,15 @@ class BlogPostObserver
     }
 
     private function setUser(BlogPostModels $blogPostModels){
-       
+
+        //Если пользователь авторизован, присвоить посту его id, если нет, присвоить значение константы UNKNOWN_USER
+
         $blogPostModels->user_id = Auth::id() ?? User::UNKNOWN_USER;
     }
 
     private function setHtml(BlogPostModels $blogPostModels){
+        //Сырая реализация, в задумке метод обрабатывает данные отправленные пользователем,
+        // и только потом присваивает значения свойства объекту. Сейчас все происходит без обработки
         $blogPostModels->content_html = $blogPostModels->content_raw;
     }
 

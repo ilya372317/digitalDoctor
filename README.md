@@ -1,7 +1,6 @@
 ## Сайт на Laravel
 
-Ниже я опишу логику работы некоторых классов и пример применения встроенного и самостоятельно реализованного паттерна проектирования.
-Так же все описываемые классы, будут снабжены коментариями.
+Ниже я опишу реализацию двух паттернов проектирования, один встроенный в laravel, а другой реализован самостоятельно.
 
 ### Reprository
 
@@ -25,13 +24,13 @@ app/reprositories/coreReprository.php
 Применение встроенного в Laravel паттерна проектирования наблюдатель. Листинги находятся в папке app/Observers
 Наблюдатели, реагируя на различные действия с постами и категориями запускают вспомогательная медоты. их список:
 
-- **[$this->setSlug($blogPostModels);]**
-- **[$this->setPublishTime($blogPostModels);]**
-- **[$this->unSetPublishTime($blogPostModels)];**
-- **[$this->setUser($blogPostModels);]**
-- **[$this->setHtml($blogPostModels);]**
+- **$this->setSlug($blogPostModels);**
+- **$this->setPublishTime($blogPostModels);**
+- **$this->unSetPublishTime($blogPostModels);**
+- **$this->setUser($blogPostModels);**
+- **$this->setHtml($blogPostModels);**
+
+Таким образом, мы опять выносим логику подальше от контроллера. Так же реализовав один раз эти методы, можем использовать их и при создании, и при удалении и при редактировании записей.
 
 
 
-
-- **[Vehikl](https://vehikl.com/)**
