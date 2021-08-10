@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class BlogCategoryUpdateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+       public function rules()
+       {
+           return [
+               'title' => 'required|min:3',
+               'slug' => 'max:200',
+               'parent_id' => 'required|exists:blog_category_models,id'
+
+           ];
+       }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'У категории должно быть название',
+            'title.min' => 'Название категории должно быть не короче трех символов',
+            'slug.max' => 'Длина индификатора не должна превышать 200 символов',
+            'parent_id.required' => 'Выберите родительскую категория',
+            'parent_id.exists' => 'Выбранной родительской категории не существует',
+        ];
+    }
+}
