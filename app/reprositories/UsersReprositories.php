@@ -13,6 +13,7 @@ class UsersReprositories extends coreReprository{
         return Model::class;
     }
 
+    //Получаем данные авторизованного в текущий момент пользователя
     public function getForPolicy(){
       return  $this->startCondition()->find(Auth::id());
     }
