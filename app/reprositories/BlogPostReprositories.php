@@ -18,6 +18,8 @@ class BlogPostReprositories extends coreReprository
         return model::class;
     }
 
+    //Получаем данные для страницы всех постов
+
     public function getForPaginate($itemPerPage){
 
         Paginator::useBootstrap();
@@ -35,6 +37,8 @@ class BlogPostReprositories extends coreReprository
 
         $result = $this->startCondition()
             ->select($columns)
+            //выгребаем данные из моделей категорий и пользователей
+            //(category, user - названия методов реализуюшего связь один ко многим в модели).
             ->with(['category' => function($query){
                 $query->select('id', 'title');
             },
@@ -46,20 +50,18 @@ class BlogPostReprositories extends coreReprository
         return $result;
     }
 
+    //Получаем данные для редактирования поста
     public function getForEdit($id){
        return $this->startCondition()->find($id);
     }
 
+
+    //Получаем данные для восстоновления поста
     public function getForRestore($id){
         $item =   $this->startCondition()
         ->withTrashed()
         ->find($id);
 
         return $item;
-    }
-
-    public function getForView($id){
-        $item = $this->startCondition();
-
     }
 }

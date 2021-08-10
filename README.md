@@ -1,53 +1,37 @@
-## About Laravel
+## Сайт на Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Ниже я опишу логику работы некоторых классов и пример применения встроенного и самостоятельно реализованного паттерна проектирования.
+Так же все описываемые классы, будут снабжены коментариями.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Reprository
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Реализация паттерна проектирования reprository в данном случае понимается под неким классом,
+реализующим возможность забирать уже подготовленные данные из моделиБ, а не классом, позволяющем в теории переключить в любой момент базу данных с MySql на PostorageSql.
 
-## Learning Laravel
+Абстрактный класс coreReprository реализует подключение к конкретной модели. Дальше его расширяют остальные классы reprository.
+app/reprositories/coreReprository.php
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Реализованны репрозитории для категорий, постов, и пользователей.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+В реализациях BlogPostReprository и BlogCategoryReprository присутствует механизм отложенной выгрузки данных, а потом состовления старницы. Что позволяет сократить колличество запросов к базе данных с 48 до 4. Для этого в моделях постов и категория реализованна связь один ко многом, и метод with() позволяет нам обратившись к нужной нам связи, сначала получить данные, а потом составить страницу.
 
-## Laravel Sponsors
+Паттерн проектирования Reprository был выбран, что бы в случае необходимости выгрести какие либо данные из модели, это происходило не хаотично, в контроллере или где либо еще, а был единый механизм забора данных и выдачи. Это позволит в дальнейшем безпрепятственно расширять функционал нынешних репрозиториев, и в случае необходимости изменить какой либо алгоритм, не придется делать это по всему проекту.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Конкретное приминение можно найти в контроллерах для админки app/Http/admin/blog/{Blog...Controller.php}
 
-### Premium Partners
+
+### Observer
+
+Применение встроенного в Laravel паттерна проектирования наблюдатель. Листинги находятся в папке app/Observers
+Наблюдатели, реагируя на различные действия с постами и категориями запускают вспомогательная медоты. их список:
+
+- **$this->setSlug($blogPostModels);**
+- **$this->setPublishTime($blogPostModels);**
+- **$this->unSetPublishTime($blogPostModels);**
+- **$this->setUser($blogPostModels);**
+- **$this->setHtml($blogPostModels);**
+
+
+
 
 - **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
